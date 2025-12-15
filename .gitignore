@@ -1,0 +1,22 @@
+# IDE settings
+.idea/
+
+# Build output
+build/
+out/
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# Secrets
+.env
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
