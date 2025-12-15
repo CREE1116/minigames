@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>game-hub</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <div class="repo-breadcrumb">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30" style="border-radius:50%; opacity:1;">
+        <a href="#" class="repo-name">game-hub</a>
+        <span style="font-size: 12px; border: 1px solid var(--border-color); border-radius: 10px; padding: 0 8px; color: var(--text-secondary); margin-left: 8px;">Public</span>
+    </div>
+
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
+        <i class="fas fa-moon"></i> Dark
+    </button>
+</header>
+
+<div class="container">
+    <div class="box">
+        <div class="box-header">
+            <div style="display:flex; align-items:center; gap: 8px;">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="20" style="border-radius:50%; opacity:0.7;">
+                <span style="font-weight:600;">System</span>
+                <span class="last-commit">updated servers status now</span>
+            </div>
+            <div class="last-commit" id="lastCheckTime">Latest check: just now</div>
+        </div>
+
+        <table>
+            <tbody>
+            <tr>
+                <td class="icon-col"><i class="fas fa-ellipsis-h"></i></td>
+                <td colspan="4" style="color: var(--link-color); font-weight:600; cursor:pointer;" onclick="location.reload()">..</td>
+            </tr>
+            <tr>
+                <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
+                <td class="name-col"><a href="/catchmind/" class="name-link" id="link-catchmind">catchmind</a></td>
+                <td class="desc-col">실시간 그림 퀴즈 게임 서비스</td>
+                <td class="status-col">
+                    <span id="dot-catchmind" class="status-dot checking"></span>
+                    <span id="text-catchmind" style="font-size:12px; color:var(--text-secondary);">Checking</span>
+                </td>
+                <td style="width: 60px; text-align: center;">
+                    <a href="/catchmind/" id="btn-catchmind" class="btn-go disabled">Go</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
+                <td class="name-col"><a href="/KKUTU/" class="name-link" id="link-kkutu">KKUTU</a></td>
+                <td class="desc-col">실시간 끝말잇기 대결 서비스</td>
+                <td class="status-col">
+                    <span id="dot-kkutu" class="status-dot checking"></span>
+                    <span id="text-kkutu" style="font-size:12px; color:var(--text-secondary);">Checking</span>
+                </td>
+                <td style="width: 60px; text-align: center;">
+                    <a href="/KKUTU/" id="btn-kkutu" class="btn-go disabled">Go</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="icon-col"><i class="far fa-file-alt"></i></td>
+                <td class="name-col">README.md</td>
+                <td class="desc-col">게임 서버 모니터링 대시보드입니다.</td>
+                <td class="status-col"></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: 6px; padding: 24px; background: var(--box-bg);">
+        <h3 style="margin-top:0; border-bottom:1px solid var(--border-color); padding-bottom:8px;">README.md</h3>
+        <p style="line-height: 1.6; color: var(--text-primary);">
+            👋 <b>Welcome to Game Hub!</b><br>
+            현재 운영 중인 미니게임 서버들의 상태를 실시간으로 확인하고 접속할 수 있는 포털입니다.
+        </p>
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        document.getElementById('themeBtn').innerHTML = isDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Dark';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeBtn').innerHTML = '<i class="fas fa-sun"></i> Light';
+    }
+
+    async function checkStatus(gameId, url) {
+        const dot = document.getElementById(`dot-${gameId}`);
+        const text = document.getElementById(`text-${gameId}`);
+        const btn = document.getElementById(`btn-${gameId}`);
+        const link = document.getElementById(`link-${gameId}`);
+        try {
+            const controller = new AbortController();
+            setTimeout(() => controller.abort(), 3000);
+            const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
+            if (response.ok) {
+                dot.className = 'status-dot online'; text.innerText = 'Online';
+                btn.classList.remove('disabled'); link.style.pointerEvents = 'auto'; link.style.color = '';
+            } else throw new Error();
+        } catch (err) {
+            dot.className = 'status-dot offline'; text.innerText = 'Offline';
+            btn.classList.add('disabled'); link.style.pointerEvents = 'none'; link.style.color = 'var(--text-secondary)';
+        }
+    }
+    function runChecks() {
+        document.getElementById('lastCheckTime').innerText = 'Latest check: ' + new Date().toLocaleTimeString();
+        checkStatus('catchmind', '/catchmind/api/rooms');
+        checkStatus('kkutu', '/KKUTU/api/rooms');
+    }
+    runChecks(); setInterval(runChecks, 3000);
+</script>
+</body>
+</html>

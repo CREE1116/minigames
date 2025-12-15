@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  hub-nginx:
+    image: nginx:latest
+    container_name: game-hub
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/html:/usr/share/nginx/html
+    depends_on:
+      - catchmind-app
+      - kkutu-app
+    networks:
+      - game-network
+
+  shared-db:
+    image: mysql:8.0
+    container_name: shared-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/mysql
+    networks:
+      - game-network
+
+  # 캐치마인드
+  catchmind-app:
+    build: ./catchMind
+    container_name: catchmind-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/catchmind
+
+      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/catchmind_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    networks:
+      - game-network
+    env_file:
+      - ./catchMind/.env
+
+  # 끄투
+  kkutu-app:
+    build: ./KKUTU
+    container_name: kkutu-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/KKUTU
+
+      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/kkutu_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    networks:
+      - game-network
+    env_file:
+      - ./KKUTU/.env
+
+networks:
+  game-network:
+    driver: bridge
+
+volumes:
+  db-data:

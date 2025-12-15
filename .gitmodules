@@ -1,0 +1,6 @@
+[submodule "KKUTU"]
+	path = KKUTU
+	url = https://github.com/YeeDochi/KKUTU.git
+[submodule "catchMind"]
+	path = catchMind
+	url = https://github.com/YeeDochi/catchMind.git
