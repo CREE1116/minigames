@@ -21,9 +21,14 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kkutu_db  # [추가] 기본 DB를 미리 명시하면 더 안전함
+    command: # [추가] 한글 깨짐 방지 설정
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db-data:/var/lib/mysql
+      - ./KKUTU/db-init/korean_kr.sql:/docker-entrypoint-initdb.d/korean_kr.sql
     networks:
       - game-network
 
