@@ -138,7 +138,7 @@ docker compose down
 ---
 ### DEMO
 
-https://github.com/YeeDochi/minigames/issues/1#issue-3729316556
+https://github.com/user-attachments/assets/c8341fa1-be1b-40a2-907e-37256c753e44
 
 ---
 
