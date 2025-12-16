@@ -9,9 +9,6 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/html:/usr/share/nginx/html
-#    depends_on:
-#      - catchmind-app
-#      - kkutu-app
     networks:
       - game-network
 
@@ -21,8 +18,8 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: kkutu_db  # [추가] 기본 DB를 미리 명시하면 더 안전함
-    command: # [추가] 한글 깨짐 방지 설정
+      MYSQL_DATABASE: kkutu_db
+    command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
     volumes:
