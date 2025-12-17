@@ -1,9 +1,9 @@
-[submodule "KKUTU"]
+[submodule "modules/KKUTU"]
 	path = modules/KKUTU
 	url = https://github.com/YeeDochi/KKUTU.git
-[submodule "catchMind"]
+[submodule "modules/catchMind"]
 	path = modules/catchMind
 	url = https://github.com/YeeDochi/catchMind.git
-[submodule "Oh_Mock"]
+[submodule "modules/Oh_Mock"]
 	path = modules/Oh_Mock
-	url = https://github.com/YeeDochi/Oh_Mock
+	url = https://github.com/YeeDochi/Oh_Mock.git
