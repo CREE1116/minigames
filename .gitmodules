@@ -10,3 +10,6 @@
 [submodule "templates"]
 	path = templates
 	url = https://github.com/YeeDochi/miniGame_templates
+[submodule "modules/Yacht_Dice"]
+	path = modules/Yacht_Dice
+	url = https://github.com/YeeDochi/Yacht_Dice.git
