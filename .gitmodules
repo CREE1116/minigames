@@ -7,3 +7,6 @@
 [submodule "modules/Oh_Mock"]
 	path = modules/Oh_Mock
 	url = https://github.com/YeeDochi/Oh_Mock.git
+[submodule "templates"]
+	path = templates
+	url = https://github.com/YeeDochi/miniGame_templates
