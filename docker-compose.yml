@@ -77,6 +77,16 @@ services:
     env_file:
       - ./modules/Oh_Mock/.env
 
+  templet-app:
+    build: ./templets
+    container_name: templet-app
+    ports:
+      - "8080:8080"
+    restart: always
+
+    networks:
+      - game-network
+
 networks:
   game-network:
     driver: bridge
