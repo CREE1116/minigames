@@ -42,8 +42,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
     networks:
       - game-network
-    env_file:
-      - ./modules/catchMind/.env
+
 
   # 끄투
   kkutu-app:
@@ -74,16 +73,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
     networks:
       - game-network
-    env_file:
-      - ./modules/Oh_Mock/.env
 
-  templet-app:
-    build: ./templets
-    container_name: templet-app
-    ports:
-      - "8080:8080"
+
+  yacht_dice-app:
+    build: ./modules/Yacht_Dice
+    container_name: yacht_dice-app
     restart: always
-
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/Yacht_Dice
     networks:
       - game-network
 
