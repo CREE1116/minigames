@@ -16,3 +16,6 @@
 [submodule "modules/indian_poker"]
 	path = modules/indian_poker
 	url = https://github.com/YeeDochi/indian_poker
+[submodule "modules/mahe"]
+	path = modules/mahe
+	url = https://github.com/YeeDochi/mahe
