@@ -171,3 +171,6 @@ tr:hover { background-color: var(--row-hover); }
 
 .btn-go.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 .btn-go:hover { border-color: var(--text-secondary); }
+
+.btn-send { white-space: nowrap; flex-shrink: 0; min-width: 50px; }
+.room-item { padding: 12px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer;}
