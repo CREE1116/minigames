@@ -103,6 +103,15 @@ services:
     networks:
       - game-network
 
+  uno-app:
+    build: ./modules/UNO
+    container_name: uno-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/UNO
+    networks:
+      - game-network
+
 networks:
   game-network:
     driver: bridge
