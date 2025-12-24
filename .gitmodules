@@ -19,3 +19,6 @@
 [submodule "modules/mahe"]
 	path = modules/mahe
 	url = https://github.com/YeeDochi/mahe
+[submodule "modules/UNO"]
+	path = modules/UNO
+	url = https://github.com/YeeDochi/UNO
