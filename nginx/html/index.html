@@ -174,7 +174,7 @@
         const link = document.getElementById(`link-${gameId}`);
         try {
             const controller = new AbortController();
-            setTimeout(() => controller.abort(), 3000);
+            setTimeout(() => controller.abort(), 4000);
             const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
             if (response.ok) {
                 dot.className = 'status-dot online'; text.innerText = 'Online';
@@ -196,7 +196,7 @@
         checkStatus('UNO', '/UNO/api/rooms');
         checkStatus('Clue', '/Clue/api/rooms');
     }
-    runChecks(); setInterval(runChecks, 3000);
+    runChecks(); setInterval(runChecks, 4000);
 </script>
 </body>
 </html>
