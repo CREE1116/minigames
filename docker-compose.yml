@@ -112,6 +112,15 @@ services:
     networks:
       - game-network
 
+  clue-app:
+    build: ./modules/Clue
+    container_name: clue-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/Clue
+    networks:
+      - game-network
+
 networks:
   game-network:
     driver: bridge

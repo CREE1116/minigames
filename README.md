@@ -19,6 +19,8 @@ Nginx를 리버스 프록시(Gateway)로 사용하여 트래픽을 라우팅하�
 4.  **🎲 야추 다이스 (Yacht Dice)**: 주사위를 굴려 족보를 완성하고 점수를 겨루는 보드게임.
 5.  **🃏 인디언 포커 (Indian Poker)**: 상대방의 패를 추리하며 베팅하는 심리 카드 게임.
 6.  **🐢 마헤 (Mahe)**: 주사위를 굴려 거북이를 이동시키는 레이싱 보드게임.
+7.  **🃏 우노 (UNO)**: 색깔과 숫자를 맞추며 카드를 털어내는 카드 게임.
+8.  **🕵️ 클루 (Clue)**: 단서를 모아 범인, 흉기, 장소를 추리하는 보드게임.
 
 ---
 
@@ -54,6 +56,8 @@ graph LR
         Nginx -- /Yacht_Dice --> YD[Yacht Dice App]
         Nginx -- /indian_poker --> IP[Indian Poker App]
         Nginx -- /mahe --> MH[Mahe App]
+        Nginx -- /UNO --> UN[UNO App]
+        Nginx -- /Clue --> CL[Clue App]
         
         CM -- JDBC --> DB[(Shared MySQL)]
         KK -- JDBC --> DB
@@ -61,6 +65,8 @@ graph LR
         YD -- JDBC --> DB
         IP -- JDBC --> DB
         MH -- JDBC --> DB
+        UN -- JDBC --> DB
+        CL -- JDBC --> DB
     end
 ```
 * **Nginx**: 메인 허브 UI 제공 및 각 게임 경로(`/catchmind`, `/KKUTU`, `/Oh_Mock` 등)에 따른 리버스 프록시 역할. 웹소켓(Upgrade 헤더) 처리가 구성되어 있습니다.
@@ -130,7 +136,9 @@ docker compose down
     ├── Oh_Mock/             # 오목
     ├── Yacht_Dice/          # 야추 다이스
     ├── indian_poker/        # 인디언 포커
-    └── mahe/                # 마헤
+    ├── mahe/                # 마헤
+    ├── UNO/                 # 우노
+    └── Clue/                # 클루
 ```
 
 ### 🐛 트러블슈팅 (Troubleshooting)
