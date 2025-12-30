@@ -22,3 +22,6 @@
 [submodule "modules/UNO"]
 	path = modules/UNO
 	url = https://github.com/YeeDochi/UNO
+[submodule "modules/Clue"]
+	path = modules/Clue
+	url = https://github.com/YeeDochi/Clue.git
