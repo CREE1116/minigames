@@ -2,11 +2,35 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>game-hub</title>
+    <title>Game Hub - Login</title>
     <link rel="stylesheet" href="/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" href="https://cdn.simpleicons.org/github/ffffff" type="image/svg+xml">
+    <style>
+        /* [추가] 모달(로그인 창) 스타일 */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--box-bg); padding: 24px; border-radius: 8px; width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid var(--border-color);
+        }
+        .modal h2 { margin-top: 0; color: var(--text-primary); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-secondary); font-size: 14px; }
+        .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+        .tab-group { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .tab {
+            flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-secondary);
+            border-bottom: 2px solid transparent; font-weight: 500;
+        }
+        .tab.active { color: var(--link-color); border-bottom-color: var(--link-color); }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+    </style>
 </head>
 <body>
 
@@ -14,12 +38,22 @@
     <div class="repo-breadcrumb">
         <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30" style="border-radius:50%; opacity:1;">
         <a href="#" class="repo-name">game-hub</a>
-        <span style="font-size: 12px; border: 1px solid var(--border-color); border-radius: 10px; padding: 0 8px; color: var(--text-secondary); margin-left: 8px;">Public</span>
+        <span class="badge">Public</span>
     </div>
 
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
-        <i class="fas fa-moon"></i> Dark
-    </button>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <div id="loggedOutArea">
+            <button class="btn-go" onclick="openModal()">Sign in</button>
+        </div>
+        <div id="loggedInArea" class="hidden user-info">
+            <span style="color: var(--text-primary);">👋 <b id="userNickname">User</b></span>
+            <button class="btn-go" onclick="logout()">Sign out</button>
+        </div>
+
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
+            <i class="fas fa-moon"></i> Dark
+        </button>
+    </div>
 </header>
 
 <div class="container">
@@ -28,134 +62,118 @@
             <div style="display:flex; align-items:center; gap: 8px;">
                 <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="20" style="border-radius:50%; opacity:0.7;">
                 <span style="font-weight:600;">System</span>
-                <span class="last-commit">updated servers status now</span>
+                <span class="last-commit" id="lastCheckTime">Latest check: just now</span>
             </div>
-            <div class="last-commit" id="lastCheckTime">Latest check: just now</div>
         </div>
 
         <table>
             <tbody>
             <tr>
-                <td class="icon-col"><i class="fas fa-ellipsis-h"></i></td>
-                <td colspan="4" style="color: var(--link-color); font-weight:600; cursor:pointer;" onclick="location.reload()">..</td>
+                <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
+                <td class="name-col"><a href="/catchmind/" class="name-link">catchmind</a></td>
+                <td class="desc-col">실시간 그림 퀴즈</td>
+                <td class="status-col"><span id="dot-catchmind" class="status-dot checking"></span><span id="text-catchmind">Checking</span></td>
+                <td><a href="/catchmind/" id="btn-catchmind" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/catchmind/" class="name-link" id="link-catchmind">catchmind</a></td>
-                <td class="desc-col">실시간 그림 퀴즈 게임 서비스</td>
-                <td class="status-col">
-                    <span id="dot-catchmind" class="status-dot checking"></span>
-                    <span id="text-catchmind" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/catchmind/" id="btn-catchmind" class="btn-go disabled">Go</a>
-                </td>
+                <td class="name-col"><a href="/KKUTU/" class="name-link">KKUTU</a></td>
+                <td class="desc-col">실시간 끝말잇기</td>
+                <td class="status-col"><span id="dot-kkutu" class="status-dot checking"></span><span id="text-kkutu">Checking</span></td>
+                <td><a href="/KKUTU/" id="btn-kkutu" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/KKUTU/" class="name-link" id="link-kkutu">KKUTU</a></td>
-                <td class="desc-col">실시간 끝말잇기 대결 서비스</td>
-                <td class="status-col">
-                    <span id="dot-kkutu" class="status-dot checking"></span>
-                    <span id="text-kkutu" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/KKUTU/" id="btn-kkutu" class="btn-go disabled">Go</a>
-                </td>
+                <td class="name-col"><a href="/Oh_Mock/" class="name-link">Oh!_Mock</a></td>
+                <td class="desc-col">1 대 1 오목</td>
+                <td class="status-col"><span id="dot-Oh_Mock" class="status-dot checking"></span><span id="text-Oh_Mock">Checking</span></td>
+                <td><a href="/Oh_Mock/" id="btn-Oh_Mock" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Oh_Mock/" class="name-link" id="link-Oh_Mock">Oh!_Mock</a></td>
-                <td class="desc-col">1 대 1 이미지 오목 서비스</td>
-                <td class="status-col">
-                    <span id="dot-Oh_Mock" class="status-dot checking"></span>
-                    <span id="text-Oh_Mock" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/Oh_Mock/" id="btn-Oh_Mock" class="btn-go disabled">Go</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Yacht_Dice/" class="name-link" id="link-Yacht_Dice">Yacht_Dice</a></td>
+                <td class="name-col"><a href="/Yacht_Dice/" class="name-link">Yacht_Dice</a></td>
                 <td class="desc-col">야추 다이스</td>
-                <td class="status-col">
-                    <span id="dot-Yacht_Dice" class="status-dot checking"></span>
-                    <span id="text-Yacht_Dice" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/Yacht_Dice/" id="btn-Yacht_Dice" class="btn-go disabled">Go</a>
-                </td>
+                <td class="status-col"><span id="dot-Yacht_Dice" class="status-dot checking"></span><span id="text-Yacht_Dice">Checking</span></td>
+                <td><a href="/Yacht_Dice/" id="btn-Yacht_Dice" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/indian_poker/" class="name-link" id="link-indian_poker">indian_poker</a></td>
+                <td class="name-col"><a href="/indian_poker/" class="name-link">indian_poker</a></td>
                 <td class="desc-col">인디언 포커</td>
-                <td class="status-col">
-                    <span id="dot-indian_poker" class="status-dot checking"></span>
-                    <span id="text-indian_poker" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/indian_poker/" id="btn-indian_poker" class="btn-go disabled">Go</a>
-                </td>
+                <td class="status-col"><span id="dot-indian_poker" class="status-dot checking"></span><span id="text-indian_poker">Checking</span></td>
+                <td><a href="/indian_poker/" id="btn-indian_poker" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/mahe/" class="name-link" id="link-mahe">mahe</a></td>
+                <td class="name-col"><a href="/mahe/" class="name-link">mahe</a></td>
                 <td class="desc-col">마헤</td>
-                <td class="status-col">
-                    <span id="dot-mahe" class="status-dot checking"></span>
-                    <span id="text-mahe" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/mahe/" id="btn-mahe" class="btn-go disabled">Go</a>
-                </td>
+                <td class="status-col"><span id="dot-mahe" class="status-dot checking"></span><span id="text-mahe">Checking</span></td>
+                <td><a href="/mahe/" id="btn-mahe" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/UNO/" class="name-link" id="link-UNO">UNO!</a></td>
-                <td class="desc-col">우노!</td>
-                <td class="status-col">
-                    <span id="dot-UNO" class="status-dot checking"></span>
-                    <span id="text-UNO" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/UNO/" id="btn-UNO" class="btn-go disabled">Go</a>
-                </td>
+                <td class="name-col"><a href="/UNO/" class="name-link">UNO!</a></td>
+                <td class="desc-col">우노 카드게임</td>
+                <td class="status-col"><span id="dot-UNO" class="status-dot checking"></span><span id="text-UNO">Checking</span></td>
+                <td><a href="/UNO/" id="btn-UNO" class="btn-go disabled">Go</a></td>
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Clue/" class="name-link" id="link-Clue">Clue</a></td>
-                <td class="desc-col">클루</td>
-                <td class="status-col">
-                    <span id="dot-Clue" class="status-dot checking"></span>
-                    <span id="text-Clue" style="font-size:12px; color:var(--text-secondary);">Checking</span>
-                </td>
-                <td style="width: 60px; text-align: center;">
-                    <a href="/Clue/" id="btn-Clue" class="btn-go disabled">Go</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="icon-col"><i class="far fa-file-alt"></i></td>
-                <td class="name-col">README.md</td>
-                <td class="desc-col">게임 서버 모니터링 대시보드입니다.</td>
-                <td class="status-col"></td>
-                <td></td>
+                <td class="name-col"><a href="/Clue/" class="name-link">Clue</a></td>
+                <td class="desc-col">클루 추리게임</td>
+                <td class="status-col"><span id="dot-Clue" class="status-dot checking"></span><span id="text-Clue">Checking</span></td>
+                <td><a href="/Clue/" id="btn-Clue" class="btn-go disabled">Go</a></td>
             </tr>
             </tbody>
         </table>
     </div>
+</div>
 
-    <div style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: 6px; padding: 24px; background: var(--box-bg);">
-        <h3 style="margin-top:0; border-bottom:1px solid var(--border-color); padding-bottom:8px;">README.md</h3>
-        <p style="line-height: 1.6; color: var(--text-primary);">
-            👋 <b>Welcome to Game Hub!</b><br>
-            현재 운영 중인 미니게임 서버들의 상태를 실시간으로 확인하고 접속할 수 있는 포털입니다.
-        </p>
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <div class="tab-group">
+            <div class="tab active" onclick="switchTab('login')">Login</div>
+            <div class="tab" onclick="switchTab('signup')">Sign up</div>
+        </div>
+
+        <div id="loginForm">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginId" placeholder="아이디 입력">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPw" placeholder="비밀번호 입력">
+            </div>
+            <div class="form-actions">
+                <button class="btn-go" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="reqLogin()">Sign in</button>
+            </div>
+        </div>
+
+        <div id="signupForm" class="hidden">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="signId" placeholder="사용할 아이디">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="signPw" placeholder="비밀번호">
+            </div>
+            <div class="form-group">
+                <label>Nickname</label>
+                <input type="text" id="signNick" placeholder="게임 닉네임">
+            </div>
+            <div class="form-actions">
+                <button class="btn-go" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="reqSignup()">Create Account</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    // --- [1] 테마 설정 ---
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
@@ -167,36 +185,130 @@
         document.getElementById('themeBtn').innerHTML = '<i class="fas fa-sun"></i> Light';
     }
 
+    // --- [2] 로그인/회원가입 로직 ---
+    const AUTH_API = '/auth'; // nginx 라우팅 경로
+
+    // 초기 로드시 토큰 체크
+    window.onload = function() {
+        const token = localStorage.getItem('accessToken');
+        const nick = localStorage.getItem('nickname');
+        if(token && nick) {
+            setLoggedInUI(nick);
+        }
+        runChecks(); setInterval(runChecks, 3000); // 서버 상태 체크 시작
+    }
+
+    function setLoggedInUI(nickname) {
+        document.getElementById('loggedOutArea').classList.add('hidden');
+        document.getElementById('loggedInArea').classList.remove('hidden');
+        document.getElementById('userNickname').innerText = nickname;
+    }
+
+    function setLoggedOutUI() {
+        document.getElementById('loggedOutArea').classList.remove('hidden');
+        document.getElementById('loggedInArea').classList.add('hidden');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('nickname');
+    }
+
+    function logout() {
+        setLoggedOutUI();
+        alert('로그아웃 되었습니다.');
+    }
+
+    // 모달 관련
+    function openModal() { document.getElementById('authModal').classList.add('active'); }
+    function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+    function switchTab(mode) {
+        const tabs = document.querySelectorAll('.tab');
+        if(mode === 'login') {
+            tabs[0].classList.add('active'); tabs[1].classList.remove('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+        } else {
+            tabs[0].classList.remove('active'); tabs[1].classList.add('active');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+        }
+    }
+
+    // API 호출
+    async function reqLogin() {
+        const id = document.getElementById('loginId').value;
+        const pw = document.getElementById('loginPw').value;
+        if(!id || !pw) return alert('아이디와 비밀번호를 입력하세요.');
+
+        try {
+            const res = await fetch(`${AUTH_API}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: id, password: pw })
+            });
+            const data = await res.json();
+
+            if(res.ok) {
+                localStorage.setItem('accessToken', data.token);
+                localStorage.setItem('nickname', data.nickname);
+                setLoggedInUI(data.nickname);
+                closeModal();
+                alert('로그인 성공!');
+            } else {
+                alert(data.message || '로그인 실패');
+            }
+        } catch(e) { console.error(e); alert('서버 오류 발생'); }
+    }
+
+    async function reqSignup() {
+        const id = document.getElementById('signId').value;
+        const pw = document.getElementById('signPw').value;
+        const nick = document.getElementById('signNick').value;
+        if(!id || !pw || !nick) return alert('모든 정보를 입력하세요.');
+
+        try {
+            const res = await fetch(`${AUTH_API}/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: id, password: pw, nickname: nick })
+            });
+
+            if(res.ok) {
+                alert('회원가입 완료! 로그인 해주세요.');
+                switchTab('login');
+            } else {
+                const text = await res.text();
+                alert(text || '회원가입 실패');
+            }
+        } catch(e) { console.error(e); alert('서버 오류 발생'); }
+    }
+
+    // --- [3] 서버 상태 체크 (기존 코드 유지) ---
     async function checkStatus(gameId, url) {
         const dot = document.getElementById(`dot-${gameId}`);
         const text = document.getElementById(`text-${gameId}`);
         const btn = document.getElementById(`btn-${gameId}`);
-        const link = document.getElementById(`link-${gameId}`);
+        // 로그인 여부와 관계없이 서버 상태는 체크하되, 실제 게임 입장 시 토큰 처리는 게임 내부에서 함
         try {
             const controller = new AbortController();
-            setTimeout(() => controller.abort(), 500);
+            setTimeout(() => controller.abort(), 1000);
             const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
             if (response.ok) {
                 dot.className = 'status-dot online'; text.innerText = 'Online';
-                btn.classList.remove('disabled'); link.style.pointerEvents = 'auto'; link.style.color = '';
+                btn.classList.remove('disabled');
             } else throw new Error();
         } catch (err) {
             dot.className = 'status-dot offline'; text.innerText = 'Offline';
-            btn.classList.add('disabled'); link.style.pointerEvents = 'none'; link.style.color = 'var(--text-secondary)';
+            btn.classList.add('disabled');
         }
     }
     async function runChecks() {
-        document.getElementById('lastCheckTime').innerText = 'Latest check: ' + new Date().toLocaleTimeString();
-        await checkStatus('catchmind', '/catchmind/api/rooms');
-        await checkStatus('kkutu', '/KKUTU/api/rooms');
-        await checkStatus('Oh_Mock', '/Oh_Mock/api/rooms');
-        await checkStatus('Yacht_Dice', '/Yacht_Dice/api/rooms');
-        await checkStatus('indian_poker', '/indian_poker/api/rooms');
-        await checkStatus('mahe', '/mahe/api/rooms');
-        await checkStatus('UNO', '/UNO/api/rooms');
-        await checkStatus('Clue', '/Clue/api/rooms');
+        document.getElementById('lastCheckTime').innerText = 'Check: ' + new Date().toLocaleTimeString();
+        const games = ['catchmind', 'kkutu', 'Oh_Mock', 'Yacht_Dice', 'indian_poker', 'mahe', 'UNO', 'Clue'];
+        // 경로는 nginx.conf 참고 (/catchmind/api/rooms 등) - 각 게임에 실제 health check용 api가 있어야 정확함.
+        // 현재는 임시로 api/rooms를 찌르도록 되어 있음.
+        for(const g of games) {
+            await checkStatus(g, `/${g}/api/rooms`);
+        }
     }
-    runChecks(); setInterval(runChecks, 3000);
 </script>
 </body>
 </html>
