@@ -3,7 +3,7 @@ package org.example.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.member.domain.GameRecord;
 import org.example.member.domain.User;
-import org.example.member.dto.RecordRequestDTO;
+import org.example.common.dto.RecordRequestDTO;
 import org.example.member.repo.GameRecordRepository;
 import org.example.member.repo.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,9 @@ public class InternalApiController {
 
     @Transactional
     @PostMapping("/records")
-    public ResponseEntity<?> saveRecord(@RequestBody RecordRequestDTO req,
-                                        @RequestHeader("X-SERVER-KEY") String serverKey) {
+    public ResponseEntity<?> saveRecord(
+            @RequestHeader("X-SERVER-KEY") String serverKey, // 헤더 검사
+            @RequestBody RecordRequestDTO req) {
 
         if (!"MY_SUPER_SECRET_KEY".equals(serverKey)) {
             return ResponseEntity.status(403).body("누구세요? (잘못된 서버 키)");
@@ -31,15 +32,15 @@ public class InternalApiController {
 
         User user = userRepository.findByUsername(req.getUsername())
                 .orElseThrow(() -> new RuntimeException("유저 없음"));
-        GameRecord usersRecord = gameRecordRepository.findByUserandGameType(user,req.getGameType());
+        GameRecord usersRecord = gameRecordRepository.findByUserAndGameType(user,req.getGameType());
         if(usersRecord == null) {
             GameRecord record;
-            if(req.isScore())
+            if(req.checkIsScore())
                     record = new GameRecord(user, req.getGameType(), req.getScore());
             else record = new GameRecord(user, req.getGameType(), 1);
             gameRecordRepository.save(record);
         } else{
-            if(req.isScore()) usersRecord.setScore(req.getScore());
+            if(req.checkIsScore()) usersRecord.setScore(req.getScore());
             else usersRecord.setScore(usersRecord.getScore() + 1);
         }
         return ResponseEntity.ok("기록 저장 완료");
@@ -71,5 +72,19 @@ public class InternalApiController {
 
         return ResponseEntity.ok(records);
     }
+    @GetMapping("/rankings")
+    public ResponseEntity<?> getRankings(
+            @RequestHeader("X-SERVER-KEY") String serverKey,
+            @RequestParam String gameType) {
 
+        // 1. 보안 키 검사
+        if (!"MY_SUPER_SECRET_KEY".equals(serverKey)) {
+            return ResponseEntity.status(403).body("권한 없음");
+        }
+
+        // 2. DB 조회 (Repository에 findTop5... 메서드가 있어야 함)
+        List<GameRecord> top5 = gameRecordRepository.findTop5ByGameTypeOrderByScoreDesc(gameType);
+
+        return ResponseEntity.ok(top5);
+    }
 }
