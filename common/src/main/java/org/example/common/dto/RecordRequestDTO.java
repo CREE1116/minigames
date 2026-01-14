@@ -10,16 +10,11 @@ public class RecordRequestDTO {
     private String username; // 또는 userId
     private String gameType;
     private int score;
-
-    @JsonProperty("isScore")
-    private boolean isScore;
-    public boolean checkIsScore(){
-        return isScore;
-    }
-    public RecordRequestDTO(String username, String gameType, int score, boolean isScore) {
+    private int count;
+    public RecordRequestDTO(String username, String gameType, int score, int count) {
         this.username = username;
         this.gameType = gameType;
         this.score = score;
-        this.isScore = isScore;
+        this.count = count;
     }
 }

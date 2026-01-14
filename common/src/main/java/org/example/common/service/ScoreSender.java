@@ -17,13 +17,13 @@ public class ScoreSender {
     @Value("${member.api.url}")
     private String MEMBER_API_URL;
 
-    public void sendScore(String username, String gameType, int score, boolean isScore) {
+    public void sendScore(String username, String gameType, int score) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("X-SERVER-KEY", "MY_SUPER_SECRET_KEY");
 
-            RecordRequestDTO requestDto = new RecordRequestDTO(username, gameType, score, isScore);
+            RecordRequestDTO requestDto = new RecordRequestDTO(username, gameType, score, 0);
 
             HttpEntity<RecordRequestDTO> request = new HttpEntity<>(requestDto, headers);
 

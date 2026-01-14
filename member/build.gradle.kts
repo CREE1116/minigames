@@ -15,14 +15,14 @@ java {
 }
 
 dependencies {
-    implementation(project(":common"))
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     "developmentOnly"("org.springframework.boot:spring-boot-devtools")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security") // 비밀번호 암호화용
     implementation("mysql:mysql-connector-java:8.0.33")
-
+    implementation(project(":common"))
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     // JWT 라이브러리

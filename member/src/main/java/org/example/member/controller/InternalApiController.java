@@ -32,16 +32,16 @@ public class InternalApiController {
 
         User user = userRepository.findByUsername(req.getUsername())
                 .orElseThrow(() -> new RuntimeException("유저 없음"));
-        GameRecord usersRecord = gameRecordRepository.findByUserAndGameType(user,req.getGameType());
+        GameRecord usersRecord = gameRecordRepository.findByUserAndGameType(user, req.getGameType());
+
         if(usersRecord == null) {
-            GameRecord record;
-            if(req.checkIsScore())
-                    record = new GameRecord(user, req.getGameType(), req.getScore());
-            else record = new GameRecord(user, req.getGameType(), 1);
+            GameRecord record = new GameRecord(user, req.getGameType(), req.getScore(), 1);
             gameRecordRepository.save(record);
-        } else{
-            if(req.checkIsScore()) usersRecord.setScore(req.getScore());
-            else usersRecord.setScore(usersRecord.getScore() + 1);
+        } else {
+            usersRecord.setCount(usersRecord.getCount() + 1);
+            if(req.getScore() > usersRecord.getScore()) {
+                usersRecord.setScore(req.getScore());
+            }
         }
         return ResponseEntity.ok("기록 저장 완료");
     }

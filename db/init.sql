@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS game_records (
     game_type VARCHAR(255),
     score INT,
     played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    count_w INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

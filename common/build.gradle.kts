@@ -13,7 +13,9 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
-
+repositories {
+    mavenCentral()
+}
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())

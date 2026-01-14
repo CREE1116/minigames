@@ -24,15 +24,17 @@ public class GameRecord {
     private String gameType; // 예: "catchmind"
 
     private int score; // 점수
-
+    @Column(name = "count_w")
+    private int count; // 횟수
     private LocalDateTime playedAt;
 
     protected GameRecord() {}
 
-    public GameRecord(User user, String gameType, int score) {
+    public GameRecord(User user, String gameType, int score , int count) {
         this.user = user;
         this.gameType = gameType;
         this.score = score;
+        this.count = count;
         this.playedAt = LocalDateTime.now();
     }
 }
