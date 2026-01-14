@@ -27,7 +27,14 @@ CREATE TABLE IF NOT EXISTS uploaded_files (
     uploader_username VARCHAR(50), -- 업로더 아이디
     file_path VARCHAR(255) NOT NULL, -- 서버 내부 파일 경로 또는 접근 URL
     original_file_name VARCHAR(255),
-    game_type VARCHAR(50), -- 어느 게임에서 올렸는지 (예: Yacht_Dice)
+    game_type VARCHAR(50), -- 의미 없음...
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_starred BOOLEAN DEFAULT FALSE
+    );
+
+CREATE TABLE IF NOT EXISTS image_stars (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    file_id BIGINT NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    -- 특정 유저의 즐겨찾기 목록 조회 성능을 위한 인덱스
+    INDEX idx_star_user (username)
     );

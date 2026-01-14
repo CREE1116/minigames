@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UploadedFileRepository extends JpaRepository<UploadedFile, Long> {
-    List<UploadedFile> findAllByGameTypeOrderByIsStarredDescIdDesc(String gameType);
+   // List<UploadedFile> findAllOrderByIsStarredDescIdDesc();
+    List<UploadedFile> findAllByOrderByIdDesc();
 }

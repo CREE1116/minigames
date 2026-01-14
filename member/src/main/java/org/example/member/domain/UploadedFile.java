@@ -19,8 +19,6 @@ public class UploadedFile {
     private String originalFileName;
     private String gameType;
     private LocalDateTime createdAt;
-    @Column(columnDefinition = "boolean default false")
-    private boolean isStarred = false;
 
     public UploadedFile(String uploaderUsername, String filePath, String originalFileName, String gameType) {
         this.uploaderUsername = uploaderUsername;
@@ -30,7 +28,5 @@ public class UploadedFile {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void toggleStar() {
-        this.isStarred = !this.isStarred;
-    }
+
 }
