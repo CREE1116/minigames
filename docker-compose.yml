@@ -2,6 +2,7 @@ services:
   hub-nginx:
     image: nginx:latest
     container_name: game-hub
+    restart: always
     ports:
       - "80:80"
     volumes:
@@ -13,9 +14,9 @@ services:
   shared-db:
     image: mysql:8.0
     container_name: shared-db
-    restart: always
     ports:
       - "3306:3306"
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: kkutu_db
@@ -38,7 +39,6 @@ services:
         MODULE_PATH: modules/catchMind
         MODULE_NAME: catchMind
     container_name: catchmind-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/catchmind
 
@@ -58,7 +58,6 @@ services:
         MODULE_PATH: modules/KKUTU
         MODULE_NAME: KKUTU
     container_name: kkutu-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/KKUTU
 
@@ -79,7 +78,6 @@ services:
         MODULE_PATH: modules/Oh_Mock
         MODULE_NAME: Oh_Mock
     container_name: Oh_Mock-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/Oh_Mock
 
@@ -114,7 +112,6 @@ services:
         MODULE_PATH: modules/indian_poker
         MODULE_NAME: indian_poker
     container_name: indian_poker-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/indian_poker
     networks:
@@ -128,7 +125,6 @@ services:
         MODULE_PATH: modules/mahe
         MODULE_NAME: mahe
     container_name: mahe-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/mahe
     networks:
@@ -142,7 +138,6 @@ services:
         MODULE_PATH: modules/UNO
         MODULE_NAME: UNO
     container_name: uno-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/UNO
     networks:
@@ -156,7 +151,6 @@ services:
         MODULE_PATH: modules/Clue
         MODULE_NAME: Clue
     container_name: clue-app
-    restart: always
     environment:
       - SERVER_SERVLET_CONTEXT_PATH=/Clue
     networks:
@@ -178,6 +172,8 @@ services:
       - JWT_SECRET=yeedochi_minigames_secret_key_very_long_random_string_1234
     networks:
       - game-network
+    volumes:
+      - ./uploads:/app/uploads
 networks:
   game-network:
     driver: bridge

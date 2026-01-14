@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**","/error","/internal/**").permitAll() // 로그인, 회원가입은 통과
-                        .anyRequest().authenticated()            // 나머지는 인증 필요
+                        .requestMatchers("/auth/**", "/error", "/internal/**", "/api/images/**").permitAll()
+                        .anyRequest().authenticated()// 나머지는 인증 필요
                 )
                 // [추가] JWT 필터를 기본 로그인 필터 앞에 배치
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

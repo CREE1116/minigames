@@ -219,6 +219,19 @@
     </div>
 </div>
 
+<div id="successModal" class="modal">
+    <div class="modal-content" style="text-align: center; width: 300px;">
+        <div style="margin-bottom: 16px;">
+            <i class="fas fa-check-circle" style="font-size: 48px; color: var(--status-online);"></i>
+        </div>
+        <h2 style="margin: 0 0 8px 0;">환영합니다!</h2>
+        <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 14px;">
+            <b id="successNick" style="color: var(--text-primary);">User</b>님, 로그인 되었습니다.
+        </p>
+        <button class="btn-primary" onclick="closeSuccessModal()" style="width: 100%;">확인</button>
+    </div>
+</div>
+
 <script>
     // --- [1] 테마 설정 ---
     function toggleTheme() {
@@ -266,6 +279,10 @@
     // 모달 관련
     function openModal() { document.getElementById('authModal').classList.add('active'); }
     function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+
+    // [추가] 성공 모달 닫기
+    function closeSuccessModal() { document.getElementById('successModal').classList.remove('active'); }
+
     function switchTab(mode) {
         const tabs = document.querySelectorAll('.tab');
         if(mode === 'login') {
@@ -299,7 +316,10 @@
                 localStorage.setItem('username', id);
                 setLoggedInUI(data.nickname);
                 closeModal();
-                alert('로그인 성공!');
+
+                // [수정] 모달 띄우기
+                document.getElementById('successNick').innerText = data.nickname;
+                document.getElementById('successModal').classList.add('active');
             } else {
                 alert(data.message || '로그인 실패');
             }
