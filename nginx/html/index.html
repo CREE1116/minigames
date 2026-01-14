@@ -76,7 +76,7 @@
             <tbody>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/catchmind/" class="name-link" id="link-catchmind">catchmind</a></td>
+                <td class="name-col"><a href="/catchmind/" class="name-link disabled" id="link-catchmind">catchmind</a></td>
                 <td class="desc-col">실시간 그림 퀴즈 게임 서비스</td>
                 <td class="status-col">
                     <span id="dot-catchmind" class="status-dot checking"></span>
@@ -88,7 +88,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/KKUTU/" class="name-link" id="link-KKUTU">KKUTU</a></td>
+                <td class="name-col"><a href="/KKUTU/" class="name-link disabled" id="link-KKUTU">KKUTU</a></td>
                 <td class="desc-col">실시간 끝말잇기 대결 서비스</td>
                 <td class="status-col">
                     <span id="dot-KKUTU" class="status-dot checking"></span>
@@ -100,7 +100,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Oh_Mock/" class="name-link" id="link-Oh_Mock">Oh!_Mock</a></td>
+                <td class="name-col"><a href="/Oh_Mock/" class="name-link disabled" id="link-Oh_Mock">Oh!_Mock</a></td>
                 <td class="desc-col">1 대 1 이미지 오목 서비스</td>
                 <td class="status-col">
                     <span id="dot-Oh_Mock" class="status-dot checking"></span>
@@ -112,7 +112,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Yacht_Dice/" class="name-link" id="link-Yacht_Dice">Yacht_Dice</a></td>
+                <td class="name-col"><a href="/Yacht_Dice/" class="name-link disabled" id="link-Yacht_Dice">Yacht_Dice</a></td>
                 <td class="desc-col">야추 다이스</td>
                 <td class="status-col">
                     <span id="dot-Yacht_Dice" class="status-dot checking"></span>
@@ -124,7 +124,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/indian_poker/" class="name-link" id="link-indian_poker">indian_poker</a></td>
+                <td class="name-col"><a href="/indian_poker/" class="name-link disabled" id="link-indian_poker">indian_poker</a></td>
                 <td class="desc-col">인디언 포커</td>
                 <td class="status-col">
                     <span id="dot-indian_poker" class="status-dot checking"></span>
@@ -136,7 +136,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/mahe/" class="name-link" id="link-mahe">mahe</a></td>
+                <td class="name-col"><a href="/mahe/" class="name-link disabled" id="link-mahe">mahe</a></td>
                 <td class="desc-col">마헤</td>
                 <td class="status-col">
                     <span id="dot-mahe" class="status-dot checking"></span>
@@ -148,7 +148,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/UNO/" class="name-link" id="link-UNO">UNO!</a></td>
+                <td class="name-col"><a href="/UNO/" class="name-link disabled" id="link-UNO">UNO!</a></td>
                 <td class="desc-col">우노!</td>
                 <td class="status-col">
                     <span id="dot-UNO" class="status-dot checking"></span>
@@ -160,7 +160,7 @@
             </tr>
             <tr>
                 <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
-                <td class="name-col"><a href="/Clue/" class="name-link" id="link-Clue">Clue</a></td>
+                <td class="name-col"><a href="/Clue/" class="name-link disabled" id="link-Clue">Clue</a></td>
                 <td class="desc-col">클루</td>
                 <td class="status-col">
                     <span id="dot-Clue" class="status-dot checking"></span>
@@ -361,6 +361,10 @@
         const text = document.getElementById(`text-${gameId}`);
         const btn = document.getElementById(`btn-${gameId}`);
         const link = document.getElementById(`link-${gameId}`);
+
+        btn.classList.add('disabled');
+        if(link) link.classList.add('disabled');
+        
         try {
             const controller = new AbortController();
             setTimeout(() => controller.abort(), 1000);
