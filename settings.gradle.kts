@@ -16,6 +16,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "miniGames"
 
+include(":common")
+include(":member")
 include(":modules:KKUTU")
 include(":modules:Oh_Mock")
 include(":modules:catchMind")
@@ -24,5 +26,4 @@ include(":modules:indian_poker")
 include(":modules:mahe")
 include(":modules:UNO")
 include(":modules:Clue")
-include(":member")
-include(":common")
+
