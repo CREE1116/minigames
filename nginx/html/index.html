@@ -30,6 +30,12 @@
         }
         .tab.active { color: var(--link-color); border-bottom-color: var(--link-color); }
         .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        a.disabled {
+            pointer-events: none;  /* 마우스 클릭 이벤트 무시 */
+            cursor: default;
+            color: var(--text-secondary); /* 회색으로 변경 (선택사항) */
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -354,7 +360,7 @@
         const dot = document.getElementById(`dot-${gameId}`);
         const text = document.getElementById(`text-${gameId}`);
         const btn = document.getElementById(`btn-${gameId}`);
-        // 로그인 여부와 관계없이 서버 상태는 체크하되, 실제 게임 입장 시 토큰 처리는 게임 내부에서 함
+        const link = document.getElementById(`link-${gameId}`);
         try {
             const controller = new AbortController();
             setTimeout(() => controller.abort(), 1000);
@@ -362,10 +368,12 @@
             if (response.ok) {
                 dot.className = 'status-dot online'; text.innerText = 'Online';
                 btn.classList.remove('disabled');
+                if(link) link.classList.remove('disabled');
             } else throw new Error();
         } catch (err) {
             dot.className = 'status-dot offline'; text.innerText = 'Offline';
             btn.classList.add('disabled');
+            if(link) link.classList.add('disabled');
         }
     }
     async function runChecks() {
