@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS uploaded_files (
     file_path VARCHAR(255) NOT NULL, -- 서버 내부 파일 경로 또는 접근 URL
     original_file_name VARCHAR(255),
     game_type VARCHAR(50), -- 의미 없음...
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE IF NOT EXISTS image_stars (
