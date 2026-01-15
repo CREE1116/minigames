@@ -11,54 +11,44 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # [1] Member & Templates (공통/인증)
+          # [1] Member (공통/인증)
           - module: member
             path: member
             image_name: mini-member
-#          - module: templates
-#            path: templates
-#            image_name: mini-templates
 
-          # [2] Game Modules (서브모듈들)
-#          - module: catchMind
-#            path: modules/catchMind
-#            image_name: mini-catchmind
-#          - module: KKUTU
-#            path: modules/KKUTU
-#            image_name: mini-kkutu
-#          - module: Oh_Mock
-#            path: modules/Oh_Mock
-#            image_name: mini-oh_mock
+          # [2] Yacht Dice (게임)
           - module: Yacht_Dice
             path: modules/Yacht_Dice
             image_name: mini-yacht
-#          - module: indian_poker
-#            path: modules/indian_poker
-#            image_name: mini-indian_poker
-#          - module: mahe
-#            path: modules/mahe
-#            image_name: mini-mahe
-#          - module: UNO
-#            path: modules/UNO
-#            image_name: mini-uno
-#          - module: Clue
-#            path: modules/Clue
-#            image_name: mini-clue
 
     steps:
-      - name: Checkout code with Submodules
+      - name: Checkout code
         uses: actions/checkout@v3
         with:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
+
+      - name: Check for changes
+        id: check
+        run: |
+          if git diff --quiet HEAD^ HEAD -- ${{ matrix.path }} common; then
+            echo "✅ No changes in ${{ matrix.module }}. Skipping build."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "🚀 Changes detected in ${{ matrix.module }}!"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Login to Docker Hub
+        if: steps.check.outputs.changed == 'true'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push ${{ matrix.module }}
+      - name: Build and Push
+        if: steps.check.outputs.changed == 'true'
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -79,17 +69,26 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: |              
+          script: |
             cd ~/app
-
-            git init
-            git remote add origin https://github.com/YeeDochi/minigames.git || true
             
+            # 1. 안전장치 & 필요한 파일만 가져오기
+            git init > /dev/null 2>&1 || true
+            git remote add origin https://github.com/YeeDochi/minigames.git > /dev/null 2>&1 || true
             git sparse-checkout init --cone
             git sparse-checkout set docker-compose.yml nginx db
-              
+            
+            # 2. 최신 설정 파일 당겨오기 (Nginx 설정 등 업데이트)
             git pull origin main
             
+            # 3. 변경된 이미지가 있다면 당겨오기
             docker compose pull
+            
+            # 4. 컨테이너 실행 (변경된 것만 재시작됨)
             docker compose up -d --remove-orphans
+            
+            # 5. Nginx 설정 변경 적용을 위해 재시작 (이미지는 그대로, 설정만 반영)
+            docker compose restart hub-nginx
+            
+            # 6. 청소
             docker image prune -f
