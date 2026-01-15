@@ -180,6 +180,76 @@
             </tbody>
         </table>
     </div>
+    <div id="readme-section" class="box" style="margin-top: 24px;">
+        <div class="box-header" style="border-bottom: 1px solid var(--border-color);">
+            <div style="display:flex; align-items:center; gap: 8px;">
+                <i class="fas fa-book-open" style="font-size: 14px; opacity: 0.7;"></i>
+                <span style="font-weight:600;">README.md</span>
+            </div>
+            <div class="last-commit" style="font-weight: 400;">Project Documentation</div>
+        </div>
+
+        <div style="padding: 32px; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                <h1 style="margin: 0; border: none; font-size: 26px; color: var(--text-primary); font-weight: 700;">
+                    🎮 Web Mini-Game Hub
+                </h1>
+                <a href="https://github.com/YeeDochi/minigames" target="_blank" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+
+            <p style="font-size: 1.1em; color: var(--text-secondary); line-height: 1.6;">
+                <strong>실시간 웹소켓 기반의 멀티플레이어 게임 플랫폼</strong>입니다. <br>
+                캐치마인드, 끄투, 오목 등 다양한 미니게임을 하나의 허브에서 통합하여 즐길 수 있습니다.
+            </p>
+
+            <div style="display: flex; gap: 8px; margin: 24px 0; flex-wrap: wrap;">
+                <img src="https://img.shields.io/badge/Status-Active-success" alt="Status">
+                <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker">
+                <img src="https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white" alt="SpringBoot">
+                <img src="https://img.shields.io/badge/Nginx-Gateway-009639?logo=nginx&logoColor=white" alt="Nginx">
+            </div>
+
+            <h2 style="border-bottom: 1px solid var(--border-color); margin-top: 40px; padding-bottom: 10px; font-size: 20px; color: var(--text-primary);">📋 프로젝트 소개</h2>
+            <p style="font-size: 15px; line-height: 1.7; color: var(--text-secondary);">
+                이 프로젝트는 <strong>MSA(Microservices Architecture) 지향적 구조</strong>로 설계되었습니다. <br>
+                Nginx를 리버스 프록시(Gateway)로 사용하여 트래픽을 라우팅하며, 각 게임은 독립적인 Spring Boot 컨테이너에서 동작합니다.
+            </p>
+
+            <h3 style="margin-top: 24px; font-size: 16px; color: var(--text-primary);">🏗️ 시스템 아키텍처</h3>
+            <div style="background: var(--bg-header); padding: 20px; border-radius: 8px; margin: 16px 0; border: 1px solid var(--border-color); font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 13px; color: var(--text-primary); line-height: 1.5;">
+                User / Browser (Port 80) <br>
+                └── <strong>Nginx Gateway</strong> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── /catchmind &nbsp;→ CatchMind App <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── /KKUTU &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ KKutu App <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── /Oh_Mock &nbsp;&nbsp;&nbsp;→ Oh Mock App <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── ... (Shared MySQL Database)
+            </div>
+
+            <h2 style="border-bottom: 1px solid var(--border-color); margin-top: 40px; padding-bottom: 10px; font-size: 20px; color: var(--text-primary);">🚀 실행 방법 (Getting Started)</h2>
+            <pre style="background: var(--bg-header); color: var(--text-primary); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color); overflow-x: auto; margin-top: 16px;">
+<code style="font-family: Consolas, monospace; font-size: 13px;"># 1. 저장소 클론
+git clone https://github.com/YeeDochi/minigames.git
+
+# 2. 컨테이너 빌드 및 실행
+docker compose up -d --build</code></pre>
+
+            <div style="margin-top: 48px; border-top: 1px solid var(--border-color); padding-top: 24px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="https://github.com/YeeDochi.png" width="38" height="38" style="border-radius: 50%; border: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-weight: 600; font-size: 14px; color: var(--text-primary);">YeeDochi</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Main Developer</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 16px;">
+                    <a href="https://github.com/YeeDochi/minigames/stargazers" target="_blank" style="color: var(--link-color); text-decoration: none; font-size: 14px;"><i class="fas fa-star"></i> Stars</a>
+                    <a href="https://github.com/YeeDochi/minigames/issues" target="_blank" style="color: var(--link-color); text-decoration: none; font-size: 14px;"><i class="fas fa-bug"></i> Issues</a>
+                </div>
+            </div>
+            </article>
+        </div>
 </div>
 
 <div id="authModal" class="modal">
