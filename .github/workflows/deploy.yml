@@ -79,13 +79,17 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: |
+          script: |              
             cd ~/app
+
+            git init
+            git remote add origin https://github.com/YeeDochi/minigames.git || true
             
+            git sparse-checkout init --cone
+            git sparse-checkout set docker-compose.yml nginx db
+              
             git pull origin main
-          
+            
             docker compose pull
-            
-            docker compose up -d
-            
+            docker compose up -d --remove-orphans
             docker image prune -f
