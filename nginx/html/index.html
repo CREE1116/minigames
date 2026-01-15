@@ -231,8 +231,9 @@
             <pre style="background: var(--bg-header); color: var(--text-primary); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color); overflow-x: auto; margin-top: 16px;">
 <code style="font-family: Consolas, monospace; font-size: 13px;"># 1. 저장소 클론
 git clone https://github.com/YeeDochi/minigames.git
-
-# 2. 컨테이너 빌드 및 실행
+# 2. 서브모듈 로드
+git submodule update --init
+# 3. 컨테이너 빌드 및 실행
 docker compose up -d --build</code></pre>
 
             <div style="margin-top: 48px; border-top: 1px solid var(--border-color); padding-top: 24px; display: flex; justify-content: space-between; align-items: center;">
