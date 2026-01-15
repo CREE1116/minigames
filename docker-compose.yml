@@ -5,9 +5,11 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/html:/usr/share/nginx/html
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - game-network
 
@@ -30,71 +32,48 @@ services:
     networks:
       - game-network
 
-  # 캐치마인드
-  catchmind-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/catchMind
-        MODULE_NAME: catchMind
-    container_name: catchmind-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/catchmind
+  # --- 게임 서비스들 (이미지 기반) ---
 
-      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/catchmind_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-    networks:
-      - game-network
-
-
-  # 끄투
-  kkutu-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/KKUTU
-        MODULE_NAME: KKUTU
-    container_name: kkutu-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/KKUTU
-
-      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/kkutu_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-    networks:
-      - game-network
-    env_file:
-      - ./modules/KKUTU/.env
-
-  # 오목
-  oh_mock-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/Oh_Mock
-        MODULE_NAME: Oh_Mock
-    container_name: Oh_Mock-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/Oh_Mock
-
-      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/oh_mock_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-    networks:
-      - game-network
-
+#  catchmind-app:
+#    image: ghksqkdwod/mini-catchmind:latest
+#    container_name: catchmind-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/catchmind
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/catchmind_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
+#    networks:
+#      - game-network
+#
+#  kkutu-app:
+#    image: ghksqkdwod/mini-kkutu:latest
+#    container_name: kkutu-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/KKUTU
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/kkutu_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
+#    networks:
+#      - game-network
+#    env_file:
+#      - ./modules/KKUTU/.env
+#
+#  oh_mock-app:
+#    image: ghksqkdwod/mini-oh_mock:latest
+#    container_name: Oh_Mock-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/Oh_Mock
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://shared-db:3306/oh_mock_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
+#    networks:
+#      - game-network
 
   yacht_dice-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/Yacht_Dice
-        MODULE_NAME: Yacht_Dice
+    image: ghksqkdwod/mini-yacht:latest
     container_name: yacht_dice-app
     restart: always
     environment:
@@ -102,67 +81,46 @@ services:
       - API_URL=http://member-app:8080/internal/api
     networks:
       - game-network
+#
+#  indian_poker-app:
+#    image: ghksqkdwod/mini-indian_poker:latest
+#    container_name: indian_poker-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/indian_poker
+#    networks:
+#      - game-network
+#
+#  mahe-app:
+#    image: ghksqkdwod/mini-mahe:latest
+#    container_name: mahe-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/mahe
+#    networks:
+#      - game-network
+#
+#  uno-app:
+#    image: ghksqkdwod/mini-uno:latest
+#    container_name: uno-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/UNO
+#    networks:
+#      - game-network
+#
+#  clue-app:
+#    image: ghksqkdwod/mini-clue:latest
+#    container_name: clue-app
+#    restart: always
+#    environment:
+#      - SERVER_SERVLET_CONTEXT_PATH=/Clue
+#    networks:
+#      - game-network
 
-
-  indian_poker-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/indian_poker
-        MODULE_NAME: indian_poker
-    container_name: indian_poker-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/indian_poker
-    networks:
-      - game-network
-
-  mahe-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/mahe
-        MODULE_NAME: mahe
-    container_name: mahe-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/mahe
-    networks:
-      - game-network
-
-  uno-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/UNO
-        MODULE_NAME: UNO
-    container_name: uno-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/UNO
-    networks:
-      - game-network
-
-  clue-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: modules/Clue
-        MODULE_NAME: Clue
-    container_name: clue-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/Clue
-    networks:
-      - game-network
-
+  # --- 계정 서비스 (이미지 기반) ---
   member-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: member
-        MODULE_NAME: member
+    image: ghksqkdwod/mini-member:latest
     container_name: member-app
     restart: always
     environment:
@@ -174,21 +132,6 @@ services:
       - game-network
     volumes:
       - ./uploads:/app/uploads
-
-
-  templates-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE_PATH: templates
-        MODULE_NAME: templates
-    container_name: templates-app
-    environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/templates
-      - API_URL=http://member-app:8080/internal/api
-    networks:
-      - game-network
 
 networks:
   game-network:

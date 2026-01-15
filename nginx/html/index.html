@@ -336,6 +336,7 @@ docker compose up -d --build</code></pre>
     </div>
 </div>
 <script>
+    let isFirstCheck = true;
     // --- [1] 테마 설정 ---
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
@@ -535,16 +536,19 @@ docker compose up -d --build</code></pre>
     }
 
     async function runChecks() {
-        document.getElementById('lastCheckTime').innerText = 'Check: ' + new Date().toLocaleTimeString();
         const games = ['catchmind', 'KKUTU', 'Oh_Mock', 'Yacht_Dice', 'indian_poker', 'mahe', 'UNO', 'Clue'];
-        // 경로는 nginx.conf 참고 (/catchmind/api/rooms 등) - 각 게임에 실제 health check용 api가 있어야 정확함.
-        // 현재는 임시로 api/rooms를 찌르도록 되어 있음.
-        // for(const g of games) {
-        //     await checkStatus(g, `/${g}/api/rooms`);
-        // }
-        games.forEach(g => {
-            checkStatus(g, `/${g}/api/rooms`);
-        });
+        document.getElementById('lastCheckTime').innerText = 'Check: ' + new Date().toLocaleTimeString();
+
+        if (isFirstCheck) {
+            console.log("초기 로딩: 병렬 상태 체크 시작");
+            await Promise.all(games.map(g => checkStatus(g, `/${g}/api/rooms`)));
+            isFirstCheck = false;
+        } else {
+            console.log("주기적 폴링: 순차 상태 체크 시작");
+            for (const g of games) {
+                await checkStatus(g, `/${g}/api/rooms`);
+            }
+        }
     }
 
 

@@ -1,0 +1,91 @@
+name: CI/CD Multi-Module Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # [1] Member & Templates (공통/인증)
+          - module: member
+            path: member
+            image_name: mini-member
+#          - module: templates
+#            path: templates
+#            image_name: mini-templates
+
+          # [2] Game Modules (서브모듈들)
+#          - module: catchMind
+#            path: modules/catchMind
+#            image_name: mini-catchmind
+#          - module: KKUTU
+#            path: modules/KKUTU
+#            image_name: mini-kkutu
+#          - module: Oh_Mock
+#            path: modules/Oh_Mock
+#            image_name: mini-oh_mock
+          - module: Yacht_Dice
+            path: modules/Yacht_Dice
+            image_name: mini-yacht
+#          - module: indian_poker
+#            path: modules/indian_poker
+#            image_name: mini-indian_poker
+#          - module: mahe
+#            path: modules/mahe
+#            image_name: mini-mahe
+#          - module: UNO
+#            path: modules/UNO
+#            image_name: mini-uno
+#          - module: Clue
+#            path: modules/Clue
+#            image_name: mini-clue
+
+    steps:
+      - name: Checkout code with Submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push ${{ matrix.module }}
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image_name }}:latest
+          build-args: |
+            MODULE_PATH=${{ matrix.path }}
+            MODULE_NAME=${{ matrix.module }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ~/app
+            
+            git pull origin main
+          
+            docker compose pull
+            
+            docker compose up -d
+            
+            docker image prune -f

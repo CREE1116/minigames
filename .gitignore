@@ -20,5 +20,6 @@ gradlew.bat
 # OS generated files
 .DS_Store
 Thumbs.db
-
+*.pem
 *.jpg
+docker-compose.override.yml
