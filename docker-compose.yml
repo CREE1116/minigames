@@ -185,7 +185,7 @@ services:
         MODULE_NAME: templates
     container_name: templates-app
     environment:
-      - SERVER_SERVLET_CONTEXT_PATH=/
+      - SERVER_SERVLET_CONTEXT_PATH=/templates
       - API_URL=http://member-app:8080/internal/api
     networks:
       - game-network
