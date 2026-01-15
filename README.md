@@ -154,6 +154,9 @@ docker compose down
 https://github.com/user-attachments/assets/c8341fa1-be1b-40a2-907e-37256c753e44
 
 ---
+### DEPLOYMENT
+
+https://dochi-minigames.duckdns.org
 
 👤 Author
 Yeedochi - Main Developer
