@@ -307,7 +307,34 @@ docker compose up -d --build</code></pre>
         <button class="btn-primary" onclick="closeSuccessModal()" style="width: 100%;">확인</button>
     </div>
 </div>
+<div id="logoutConfirmModal" class="modal">
+    <div class="modal-content" style="text-align: center; width: 300px;">
+        <div style="margin-bottom: 16px;">
+            <i class="fas fa-question-circle" style="font-size: 48px; color: var(--text-secondary);"></i>
+        </div>
+        <h2 style="margin: 0 0 8px 0;">로그아웃</h2>
+        <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 14px;">
+            정말 로그아웃 하시겠습니까?
+        </p>
+        <div class="form-actions" style="justify-content: center;">
+            <button class="btn-go" onclick="closeLogoutModal()">취소</button>
+            <button class="btn-primary" onclick="confirmLogout()">확인</button>
+        </div>
+    </div>
+</div>
 
+<div id="logoutAlertModal" class="modal">
+    <div class="modal-content" style="text-align: center; width: 300px;">
+        <div style="margin-bottom: 16px;">
+            <i class="fas fa-info-circle" style="font-size: 48px; color: var(--link-color);"></i>
+        </div>
+        <h2 style="margin: 0 0 8px 0;">알림</h2>
+        <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 14px;">
+            로그아웃 되었습니다.
+        </p>
+        <button class="btn-primary" onclick="location.reload()" style="width: 100%;">확인</button>
+    </div>
+</div>
 <script>
     // --- [1] 테마 설정 ---
     function toggleTheme() {
@@ -329,9 +356,10 @@ docker compose up -d --build</code></pre>
         const token = localStorage.getItem('accessToken');
         const nick = localStorage.getItem('nickname');
         if(token && nick) {
-            setLoggedInUI(nick);
+            setLoggedInUI(nick); // 로그인 UI 적용
         }
-        runChecks(); setInterval(runChecks, 3000); // 서버 상태 체크 시작
+        runChecks(); // 즉시 서버 체크
+        setInterval(runChecks, 5000); // 30초 간격 무한 반복 (폴링)
     }
 
     function setLoggedInUI(nickname) {
@@ -351,7 +379,26 @@ docker compose up -d --build</code></pre>
         setLoggedOutUI();
         alert('로그아웃 되었습니다.');
     }
+    function logout() {
+        document.getElementById('logoutConfirmModal').classList.add('active');
+    }
 
+    function closeLogoutModal() {
+        document.getElementById('logoutConfirmModal').classList.remove('active');
+    }
+
+    function confirmLogout() {
+        document.getElementById('loggedOutArea').classList.remove('hidden');
+        document.getElementById('loggedInArea').classList.add('hidden');
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('nickname');
+        localStorage.removeItem('username');
+        localStorage.removeItem('jwt');
+
+        closeLogoutModal();
+        document.getElementById('logoutAlertModal').classList.add('active');
+    }
     // 모달 관련
     function openModal() { document.getElementById('authModal').classList.add('active'); }
     function closeModal() { document.getElementById('authModal').classList.remove('active'); }
@@ -424,41 +471,83 @@ docker compose up -d --build</code></pre>
             }
         } catch(e) { console.error(e); alert('서버 오류 발생'); }
     }
-
-    // --- [3] 서버 상태 체크 (기존 코드 유지) ---
     async function checkStatus(gameId, url) {
         const dot = document.getElementById(`dot-${gameId}`);
         const text = document.getElementById(`text-${gameId}`);
         const btn = document.getElementById(`btn-${gameId}`);
         const link = document.getElementById(`link-${gameId}`);
 
-        btn.classList.add('disabled');
-        if(link) link.classList.add('disabled');
-        
+        // 1. [핵심] 네트워크 요청 전, 로컬 스토리지에 있는 값을 즉시 UI에 반영
+        const cachedData = localStorage.getItem(`status_${gameId}`);
+        if (cachedData) {
+            try {
+                const { status } = JSON.parse(cachedData);
+                applyStatusUI(gameId, status); // 일단 이전 상태로 활성화/비활성화
+            } catch (e) {
+                console.error("캐시 로드 실패:", e);
+            }
+        }
+
+        // 2. 백그라운드에서 실제 서버 상태 체크 진행
         try {
             const controller = new AbortController();
-            setTimeout(() => controller.abort(), 1000);
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+
             const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
-            if (response.ok) {
-                dot.className = 'status-dot online'; text.innerText = 'Online';
-                btn.classList.remove('disabled');
-                if(link) link.classList.remove('disabled');
-            } else throw new Error();
+            clearTimeout(timeoutId);
+
+            const newStatus = response.ok ? 'online' : 'offline';
+
+            // 3. 상태가 변했을 때만 혹은 주기적으로 스토리지와 UI를 최신화
+            saveAndApplyStatus(gameId, newStatus);
         } catch (err) {
-            dot.className = 'status-dot offline'; text.innerText = 'Offline';
+            saveAndApplyStatus(gameId, 'offline');
+        }
+    }
+
+    // UI 적용 공통 함수
+    function applyStatusUI(gameId, status) {
+        const dot = document.getElementById(`dot-${gameId}`);
+        const text = document.getElementById(`text-${gameId}`);
+        const btn = document.getElementById(`btn-${gameId}`);
+        const link = document.getElementById(`link-${gameId}`);
+
+        if (status === 'online') {
+            dot.className = 'status-dot online';
+            text.innerText = 'Online';
+            btn.classList.remove('disabled');
+            if(link) link.classList.remove('disabled');
+        } else {
+            dot.className = 'status-dot offline';
+            text.innerText = 'Offline';
             btn.classList.add('disabled');
             if(link) link.classList.add('disabled');
         }
     }
+
+    // 데이터 저장 및 반영
+    function saveAndApplyStatus(gameId, status) {
+        localStorage.setItem(`status_${gameId}`, JSON.stringify({
+            status: status,
+            timestamp: Date.now()
+        }));
+        applyStatusUI(gameId, status);
+    }
+
     async function runChecks() {
         document.getElementById('lastCheckTime').innerText = 'Check: ' + new Date().toLocaleTimeString();
         const games = ['catchmind', 'KKUTU', 'Oh_Mock', 'Yacht_Dice', 'indian_poker', 'mahe', 'UNO', 'Clue'];
         // 경로는 nginx.conf 참고 (/catchmind/api/rooms 등) - 각 게임에 실제 health check용 api가 있어야 정확함.
         // 현재는 임시로 api/rooms를 찌르도록 되어 있음.
-        for(const g of games) {
-            await checkStatus(g, `/${g}/api/rooms`);
-        }
+        // for(const g of games) {
+        //     await checkStatus(g, `/${g}/api/rooms`);
+        // }
+        games.forEach(g => {
+            checkStatus(g, `/${g}/api/rooms`);
+        });
     }
+
+
 </script>
 </body>
 </html>
