@@ -17,6 +17,7 @@ dependencyResolutionManagement {
 rootProject.name = "miniGames"
 
 include(":common")
+include(":templates")
 include(":member")
 include(":modules:KKUTU")
 include(":modules:Oh_Mock")
