@@ -107,7 +107,7 @@ jobs:
             git remote add origin https://github.com/YeeDochi/minigames.git
             
             git sparse-checkout init --cone
-            git sparse-checkout set docker-compose.yml nginx db
+            git sparse-checkout set modules nginx db
 
             git fetch --depth 1 origin main
             
