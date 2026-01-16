@@ -71,9 +71,11 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ~/app
-            
+            sudo chown -R $USER:$USER .
             git init > /dev/null 2>&1 || true
             git remote add origin https://github.com/YeeDochi/minigames.git > /dev/null 2>&1 || true
+            git fetch --all
+            git reset --hard origin/main
             git sparse-checkout init --cone
             git sparse-checkout set docker-compose.yml nginx db
             
