@@ -108,13 +108,32 @@ jobs:
             git sparse-checkout init --cone
             git sparse-checkout set modules nginx db
 
-            git fetch --depth 1 origin main
+            # 최신 코드 가져오기
+            git fetch --depth 2 origin main
+            
+            if git diff --name-only HEAD origin/main | grep -E "^nginx/|^docker-compose.yml"; then
+              echo "🔄 Nginx configuration changed. Will RESTART."
+              IS_NGINX_CHANGED=true
+            else
+              echo "✅ No Nginx changes. Will RELOAD."
+              IS_NGINX_CHANGED=false
+            fi
             
             git reset --hard origin/main
-            rm docker-compose.override.yml
+
+            rm docker-compose.override.yml || true
             rm -f gradlew gradlew.bat settings.gradle.kts Dockerfile README.md
             rm -rf templates gradle build
+            
             docker compose pull
             docker compose up -d --remove-orphans
-            docker compose exec hub-nginx nginx -s reload || true
+            
+            if [ "$IS_NGINX_CHANGED" = true ]; then
+              echo "Executing Nginx RESTART..."
+              docker compose restart hub-nginx
+            else
+              echo "Executing Nginx RELOAD..."
+              docker compose exec hub-nginx nginx -s reload || true
+            fi
+            
             docker image prune -f

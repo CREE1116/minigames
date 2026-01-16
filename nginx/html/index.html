@@ -498,9 +498,15 @@ docker compose up -d --build</code></pre>
             const response = await fetch(url, { method: 'HEAD', signal: controller.signal });
             clearTimeout(timeoutId);
 
-            const newStatus = response.ok ? 'online' : 'offline';
+            let isOnline = false;
 
-            // 3. 상태가 변했을 때만 혹은 주기적으로 스토리지와 UI를 최신화
+            if (response.ok && !response.redirected) {
+                isOnline = true;
+            } else {
+                isOnline = false;
+            }
+
+            const newStatus = isOnline ? 'online' : 'offline';
             saveAndApplyStatus(gameId, newStatus);
         } catch (err) {
             saveAndApplyStatus(gameId, 'offline');
