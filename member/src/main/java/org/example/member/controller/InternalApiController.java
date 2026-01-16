@@ -35,12 +35,16 @@ public class InternalApiController {
         GameRecord usersRecord = gameRecordRepository.findByUserAndGameType(user, req.getGameType());
 
         if(usersRecord == null) {
-            GameRecord record = new GameRecord(user, req.getGameType(), req.getScore(), 1);
+            GameRecord record = null;
+            if(req.getScore() < 0) record = new GameRecord(user, req.getGameType(), 10, 1);
+            else record = new GameRecord(user, req.getGameType(), req.getScore(), 1);
             gameRecordRepository.save(record);
         } else {
             usersRecord.setCount(usersRecord.getCount() + 1);
             if(req.getScore() > usersRecord.getScore()) {
                 usersRecord.setScore(req.getScore());
+            }else if(req.getScore() < 0){
+                usersRecord.setScore(usersRecord.getScore()+10);
             }
         }
         return ResponseEntity.ok("기록 저장 완료");

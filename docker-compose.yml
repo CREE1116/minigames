@@ -100,14 +100,15 @@ services:
     networks:
       - game-network
 
-#  uno-app:
-#    image: ghksqkdwod/mini-uno:latest
-#    container_name: uno-app
-#    restart: always
-#    environment:
-#      - SERVER_SERVLET_CONTEXT_PATH=/UNO
-#    networks:
-#      - game-network
+  uno-app:
+    image: ghksqkdwod/mini-uno:latest
+    container_name: uno-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/UNO
+      - API_URL=http://member-app:8080/internal/api
+    networks:
+      - game-network
 
   clue-app:
     image: ghksqkdwod/mini-clue:latest
