@@ -21,6 +21,34 @@ jobs:
             path: modules/Yacht_Dice
             image_name: mini-yacht
 
+          # [3] 👇 여기부터 추가된 게임들을 다 적어줘야 이미지가 만들어집니다!
+          - module: Oh_Mock
+            path: modules/Oh_Mock
+            image_name: mini-oh_mock
+
+          - module: KKUTU
+            path: modules/KKUTU
+            image_name: mini-kkutu
+
+          - module: Catch_Mind
+            path: modules/Catch_Mind
+            image_name: mini-catchmind
+
+          - module: CLUE
+            path: modules/Clue
+            image_name: mini-clue
+
+          - module: UNO
+            path: modules/UNO
+            image_name: mini-uno
+
+          - module: Indian_Poker
+            path: modules/Indian_Poker
+            image_name: mini-indian_poker
+
+          - module: Mahe
+            path: modules/Mahe
+            image_name: mini-mahe
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -71,20 +99,23 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ~/app
+            
             sudo chown -R $USER:$USER .
+
             git init > /dev/null 2>&1 || true
-            git remote add origin https://github.com/YeeDochi/minigames.git > /dev/null 2>&1 || true
-            git fetch --all
-            git reset --hard origin/main
+            git remote remove origin > /dev/null 2>&1 || true
+            git remote add origin https://github.com/YeeDochi/minigames.git
+            
             git sparse-checkout init --cone
             git sparse-checkout set docker-compose.yml nginx db
+
+            git fetch --depth 1 origin main
             
-            git pull origin main
-            rm -f docker-compose.override.yml
+            git reset --hard origin/main
+            rm docker-compose.override.yml
+            rm -f gradlew gradlew.bat settings.gradle.kts Dockerfile README.md
+            rm -rf templates gradle build
             docker compose pull
-            
             docker compose up -d --remove-orphans
-            
             docker compose restart hub-nginx
-            
             docker image prune -f
