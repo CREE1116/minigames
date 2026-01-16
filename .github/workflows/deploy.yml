@@ -78,7 +78,7 @@ jobs:
             git sparse-checkout set docker-compose.yml nginx db
             
             git pull origin main
-            
+            rm -f docker-compose.override.yml
             docker compose pull
             
             docker compose up -d --remove-orphans
