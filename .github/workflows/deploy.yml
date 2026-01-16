@@ -31,7 +31,7 @@ jobs:
             image_name: mini-kkutu
 
           - module: Catch_Mind
-            path: modules/Catch_Mind
+            path: modules/catchMind
             image_name: mini-catchmind
 
           - module: CLUE
@@ -47,7 +47,7 @@ jobs:
             image_name: mini-poker
 
           - module: Mahe
-            path: modules/Mahe
+            path: modules/mahe
             image_name: mini-mahe
     steps:
       - name: Checkout code
