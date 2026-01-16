@@ -16,12 +16,11 @@ jobs:
             path: member
             image_name: mini-member
 
-          # [2] Yacht Dice (게임)
+          # [2] gameModules (게임모듈들)
           - module: Yacht_Dice
             path: modules/Yacht_Dice
             image_name: mini-yacht
 
-          # [3] 👇 여기부터 추가된 게임들을 다 적어줘야 이미지가 만들어집니다!
           - module: Oh_Mock
             path: modules/Oh_Mock
             image_name: mini-oh_mock
@@ -117,5 +116,5 @@ jobs:
             rm -rf templates gradle build
             docker compose pull
             docker compose up -d --remove-orphans
-            docker compose restart hub-nginx
+            docker compose exec hub-nginx nginx -s reload || true
             docker image prune -f
