@@ -285,3 +285,60 @@ tr:hover { background-color: var(--row-hover); }
     background-color: rgba(45, 60, 164, 0.2); /* 내 메시지만 살짝 초록색 배경 (선택사항) */
     border-radius: 5px;
 }
+/* index.html의 <style> 태그 맨 아래에 추가하세요 */
+
+@media (max-width: 768px) {
+    /* 1. 전체 레이아웃: 가로 배치 -> 세로 배치로 변경 */
+    .game-layout {
+        flex-direction: column;
+        align-items: center; /* 중앙 정렬 */
+        gap: 15px;
+    }
+
+    /* 2. 게임 판(점수판) & 채팅창: 너비 100%로 변경 (고정 600px 해제) */
+    .game-stage, #right-panel {
+        width: 100%;
+        max-width: 100%; /* 화면을 넘어가지 않도록 */
+        height: auto;    /* 높이도 내용물에 맞게 자동 조절 */
+    }
+
+    /* 3. 게임 스테이지 내부 조정 */
+    .game-stage {
+        /* 점수판이 너무 길어지지 않게 최소 높이 설정 (선택사항) */
+        min-height: auto;
+    }
+
+    /* 4. 주사위 크기 최적화 (모바일에서 너무 크지 않게) */
+    .dice {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    /* 5. 점수표 폰트 및 여백 축소 (화면 꽉 참 방지) */
+    .score-table th, .score-table td {
+        padding: 6px 8px; /* 패딩 줄임 */
+        font-size: 12px;  /* 글자 크기 줄임 */
+    }
+    .category-name {
+        width: 30%; /* 족보 이름 칸 비율 조정 */
+    }
+
+    /* 6. 우측 패널(채팅/유저) 높이 제한 */
+    #right-panel {
+        /* 모바일에서는 채팅창이 너무 길면 게임판을 보기 힘드므로 높이 제한 */
+        height: 400px;
+    }
+
+    /* 7. 각종 모달(랭킹, 이미지 등) 너비 대응 */
+    .box {
+        width: 90% !important; /* 모바일에서 좌우 여백 확보 */
+        max-width: none;
+    }
+
+    /* 8. 버튼 크기 (터치하기 편하게) */
+    .btn-primary, .btn-default, .btn-danger {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
