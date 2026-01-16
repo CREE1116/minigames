@@ -72,23 +72,17 @@ jobs:
           script: |
             cd ~/app
             
-            # 1. 안전장치 & 필요한 파일만 가져오기
             git init > /dev/null 2>&1 || true
             git remote add origin https://github.com/YeeDochi/minigames.git > /dev/null 2>&1 || true
             git sparse-checkout init --cone
             git sparse-checkout set docker-compose.yml nginx db
             
-            # 2. 최신 설정 파일 당겨오기 (Nginx 설정 등 업데이트)
             git pull origin main
             
-            # 3. 변경된 이미지가 있다면 당겨오기
             docker compose pull
             
-            # 4. 컨테이너 실행 (변경된 것만 재시작됨)
             docker compose up -d --remove-orphans
             
-            # 5. Nginx 설정 변경 적용을 위해 재시작 (이미지는 그대로, 설정만 반영)
             docker compose restart hub-nginx
             
-            # 6. 청소
             docker image prune -f
