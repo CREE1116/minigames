@@ -9,7 +9,7 @@ WORKDIR /app
 COPY settings.gradle.kts gradlew ./
 COPY gradle gradle
 
-
+RUN apk add --no-cache dos2unix && dos2unix gradlew
 RUN chmod +x ./gradlew
 
 COPY common common
@@ -17,7 +17,7 @@ COPY common common
 COPY ${MODULE_PATH} ${MODULE_PATH}
 
 
-RUN ./gradlew :$(echo ${MODULE_PATH} | sed 's|/|:|g'):bootJar --no-daemon -x test
+RUN sh ./gradlew :$(echo ${MODULE_PATH} | sed 's|/|:|g'):bootJar --no-daemon -x test
 
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
