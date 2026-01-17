@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Game Hub - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
@@ -36,6 +37,83 @@
             color: var(--text-secondary); /* 회색으로 변경 (선택사항) */
             text-decoration: none;
         }
+        @media (max-width: 768px) {
+        /* 1. 전체 레이아웃 & 가로 스크롤 방지 */
+        body, html { 
+            overflow-x: hidden; 
+            width: 100%; 
+        }
+        .container { 
+            padding: 0 10px !important; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+
+        /* 2. 박스 꽉 채우기 (우측 공백 제거) */
+        .box { 
+            width: 100% !important; 
+            max-width: none; 
+            margin-bottom: 20px; 
+        }
+
+        /* 3. 헤더 최적화 */
+        header { 
+            padding: 10px 15px; /* 높이 줄임 */
+        }
+        .repo-breadcrumb { 
+            font-size: 16px; 
+        }
+        /* 공간 절약을 위해 'Public' 뱃지 숨김 */
+        .badge { 
+            display: none; 
+        }
+        /* 버튼 크기 및 여백 미세 조정 */
+        .btn-go, .theme-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        /* 4. [핵심] 테이블 다이어트 */
+        /* 모바일에서는 공간을 많이 차지하는 '설명(Description)' 칼럼 숨기기 */
+        .desc-col { 
+            display: none; 
+        }
+        
+        /* 셀 여백을 줄여서 한 줄에 꽉 차게 표시 */
+        td { 
+            padding: 12px 4px; /* 좌우 여백 축소 */
+            font-size: 13px; 
+        }
+        
+        /* 아이콘 칼럼 최소화 */
+        .icon-col { 
+            width: 30px; 
+            padding-left: 8px; 
+            text-align: center;
+        }
+        
+        /* 상태(Checking/Online) 칼럼 너비 고정 */
+        .status-col {
+            width: 70px;
+            font-size: 11px;
+        }
+
+        /* 5. README 영역 패딩 줄이기 */
+        /* 박스 내부 패딩이 너무 크면 글자가 잘리므로 축소 */
+        #readme-section > div:last-child {
+            padding: 15px !important;
+        }
+        /* 제목 폰트 크기 조절 */
+        #readme-section h1 { font-size: 20px !important; }
+        #readme-section h2 { font-size: 18px !important; }
+        
+        /* 6. 로그인 모달 창 너비 확보 */
+        .modal-content {
+            width: 90% !important;
+            max-width: 320px;
+            box-sizing: border-box;
+        }
+    }
     </style>
 </head>
 <body>
