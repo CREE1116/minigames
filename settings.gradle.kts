@@ -27,4 +27,4 @@ include(":modules:indian_poker")
 include(":modules:mahe")
 include(":modules:UNO")
 include(":modules:Clue")
-
+include(":modules:Mine")
