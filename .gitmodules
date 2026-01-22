@@ -25,3 +25,6 @@
 [submodule "modules/Clue"]
 	path = modules/Clue
 	url = https://github.com/YeeDochi/Clue.git
+[submodule "modules/Mine"]
+	path = modules/Mine
+	url = https://github.com/YeeDochi/Mine
