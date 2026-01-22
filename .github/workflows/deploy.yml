@@ -48,6 +48,10 @@ jobs:
           - module: Mahe
             path: modules/mahe
             image_name: mini-mahe
+
+          - module: Mine
+            path: modules/Mine
+            image_name: mini-mine
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
