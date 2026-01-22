@@ -83,6 +83,14 @@ services:
         MODULE_PATH: modules/Clue
         MODULE_NAME: Clue
 
+  mine-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODULE_PATH: modules/Mine
+        MODULE_NAME: Mine
+
   member-app:
     build:
       context: .

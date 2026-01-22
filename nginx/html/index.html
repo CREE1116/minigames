@@ -249,6 +249,18 @@
                 </td>
             </tr>
             <tr>
+                <td class="icon-col"><i class="fas fa-folder" style="color: #54aeff;"></i></td>
+                <td class="name-col"><a href="/Mine/" class="name-link disabled" id="link-Mine">Clue</a></td>
+                <td class="desc-col">지뢰찾기</td>
+                <td class="status-col">
+                    <span id="dot-Mine" class="status-dot checking"></span>
+                    <span id="text-Mine" style="font-size:12px; color:var(--text-secondary);">Checking</span>
+                </td>
+                <td style="width: 60px; text-align: center;">
+                    <a href="/Mine/" id="btn-Mine" class="btn-go disabled">Go</a>
+                </td>
+            </tr>
+            <tr>
                 <td class="icon-col"><i class="far fa-file-alt"></i></td>
                 <td class="name-col">README.md</td>
                 <td class="desc-col">게임 서버 모니터링 대시보드입니다.</td>
@@ -621,7 +633,7 @@ docker compose up -d --build</code></pre>
     }
 
     async function runChecks() {
-        const games = ['catchmind', 'KKUTU', 'Oh_Mock', 'Yacht_Dice', 'indian_poker', 'mahe', 'UNO', 'Clue'];
+        const games = ['catchmind', 'KKUTU', 'Oh_Mock', 'Yacht_Dice', 'indian_poker', 'mahe', 'UNO', 'Clue', 'Mine'];
         document.getElementById('lastCheckTime').innerText = 'Check: ' + new Date().toLocaleTimeString();
 
         if (isFirstCheck) {

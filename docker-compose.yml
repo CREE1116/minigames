@@ -119,6 +119,16 @@ services:
     networks:
       - game-network
 
+  mine-app:
+    image: ghksqkdwod/mini-mine:latest
+    container_name: mine-app
+    restart: always
+    environment:
+      - SERVER_SERVLET_CONTEXT_PATH=/Mine
+      - API_URL=http://member-app:8080/internal/api
+    networks:
+      - game-network
+
   # --- 계정 서비스 (이미지 기반) ---
   member-app:
     image: ghksqkdwod/mini-member:latest
