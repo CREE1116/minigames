@@ -267,10 +267,22 @@ tr:hover { background-color: var(--row-hover); }
     display: block;
     margin: 5px 0;
 }
-/*.msg-input-box input {*/
-/*    font-size: 14px; !* 원하는 크기 *!*/
-/*}*/
+.msg-input-box {
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 5px;
+    background: var(--bg-header);
 
+    /* ★ 핵심: 억지로 늘리지 말고(Stretch X), 가운데 정렬(Center O) */
+    align-items: center;
+}
+
+/* 입력창이 남은 공간을 차지하도록 설정 */
+.msg-input-box input {
+    flex: 1;
+    width: auto; /* 기존 가로폭 스타일 유지 */
+}
 .chat-img {
     width: 150px;           /* 기존 width="200" 대체 */
     border-radius: 5px;     /* 기존 style="border-radius:5px" 대체 */
